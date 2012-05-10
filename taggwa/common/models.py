@@ -1,8 +1,10 @@
-from django.db import models
+#from django.db import models
 
-# Create your models here.
+# Inherit your models from this one
 class RegisteredType:
-    """ All Resource types must be registered here on model import.
+    """ This would represent a classes with ids.
+    Inherit this class and add a call to [your class].register_class in your module.
+    uppon module import the RegisteredType._reg dict would be filled with necesary i
     """
     _reg = {
         'classes' : { 'classid_key' : 'type'}, # forward search 
@@ -24,7 +26,6 @@ class RegisteredType:
                 'classes' : { 'classid_key' : 'type'},
                 'autoid' : 0,
                 'classids' : { 'type' : 'classid_key' },
-                'root_class' : None,
             }
         RegisteredType._reg['root_class'] = cls 
         cls.register_class()
@@ -45,10 +46,9 @@ class RegisteredType:
             RegisteredType based subclass (i.e. a given Resource class)
             
             Each resource based class could be loaded from the database and
-            upclassed into a proper class (inheritance from database classes"""
+            upclassed into a proper class (inheritance from database classes)"""
         # I assume that self has been loaded properly from the database
         klass = RegisteredType._reg['classes'][self.the_classid]
-        # Now, upclassing is just select()ing another table.
         
         obj = klass.objects.get(pk = self.pk) 
         return obj # Ta-ta! 
@@ -63,9 +63,9 @@ class RegisteredType:
         abstract = True
 
 class UniqueType(RegisteredType):
-    """ """
+    """ tags are unique resources """
     pass 
 
 class AmbiguousType(RegisteredType):
-    """ Bookmarks. """
+    """ Bookmarks are ambiguous types. """
     pass
