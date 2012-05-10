@@ -3,19 +3,13 @@ from django.db import models
 # Create your models here.
 class RegisteredType:
     """ All Resource types must be registered here on model import.
-    One _reg to Rule them types all :]
     """
     _reg = {
-        'classes' : { 'classid_key' : 'type'}, # forward search ("Give me a class by classid")
-        'autoid' : -1, # When this thing becomes mime, update autoid to 
-        'classids' : { 'type' : 'the_classid'}, # reversed search ("Give me a classid by type")
-        'root_class' : None, # register this
+        'classes' : { 'classid_key' : 'type'}, # forward search 
+        'autoid' : -1, 
+        'classids' : { 'type' : 'the_classid'}, # reversed search
     }
     
-    # Each registered model has classid here BUT!
-    #  ...this could be "upgraded" to mime_types in the future one integer (two 
-    #  ... hashes for "type/subtype" because it is nicer and fancier methods 
-    #  could be used for updating the SQL database)
     the_classid = models.IntegerField(default = -1)  
     
     @classmethod
@@ -24,22 +18,22 @@ class RegisteredType:
             BaseFoo.register_root()
         """
         if RegisteredType._reg['root_class'] is None:
-            # remove all registered classes in one sweep
+
             del RegisteredType._reg
             RegisteredType._reg = {
-                'classes' : { 'classid_key' : 'type'}, # forward search ("Give me a class by a primary key")
-                'autoid' : 0, # each time ... do i really need this?
-                'classids' : { 'type' : 'classid_key' }, # reversed search ("Give me a primary key from a class")
+                'classes' : { 'classid_key' : 'type'},
+                'autoid' : 0,
+                'classids' : { 'type' : 'classid_key' },
                 'root_class' : None,
             }
-        RegisteredType._reg['root_class'] = cls # not used at the moment
+        RegisteredType._reg['root_class'] = cls 
         cls.register_class()
         
     @classmethod
     def register_class(cls):
         """ Register a type into the _reg"""
         if cls is RegisteredType:
-            raise "Please do _not_ register RegisteredType!" # Kiss
+            raise "Please do _not_ register RegisteredType!"
             
         cid = RegisteredType._reg[autoid]
         RegisteredType._reg['classes'][cls] = cid
@@ -56,10 +50,6 @@ class RegisteredType:
         klass = RegisteredType._reg['classes'][self.the_classid]
         # Now, upclassing is just select()ing another table.
         
-        # Magic mantra. 
-        #   All derivatives 
-        #   of RegisteredType share primary key w/ this one, because 
-        #   they are declared abstract.
         obj = klass.objects.get(pk = self.pk) 
         return obj # Ta-ta! 
         
@@ -70,20 +60,12 @@ class RegisteredType:
         print "@%s: the_type=%s;" % (id(self), self.the_classid)
     
     class Meta:
-        abstract = True # Has to be a model i guess. Each class must hold classids in it's own table
+        abstract = True
 
-# Murkyw (boril):
-# Todo: Add base differentiation between UniqueResources and 
-# Non-unique resources
-#
-# Tags are unique types (mark them into the database with Meta class, if django 
-#    supports it) 
-# Resources are unique too
-# But Bookmarks (grouping w/ a concrete WebUser in mind is not is not)
-# Somehow, the descendents of UniqueType must "enforce" unique.
-#  __init__? __new__?
 class UniqueType(RegisteredType):
+    """ """
     pass 
 
 class AmbiguousType(RegisteredType):
+    """ Bookmarks. """
     pass
