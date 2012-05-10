@@ -1,5 +1,4 @@
 This is an educational web tagging program.
-Author: Boril B. Boyanov <borko.boyanov@gmail.com, murkyw@abv.bg>
 
 Goals:
 * To provide tags over URL links, Books, and other types of resources.
@@ -17,16 +16,3 @@ The idea is also to make this social and semi-interactive in order to provide
 useful statistics over which tags a given user clicking, when he/she has been 
 clicking them and how that could be used in order to improve their natural memory 
 capacity
-
-You might say that this application
-
-How?
-By using a web platform with a dry principle.
-
-Future:
-* Adding support for interacting with browser plugins. 
-* Adding support for localised instalation package and the ability to synch
- different TaggWA applications hosted on different network nodes.
- That is, you would have the TaggWA application on your computer and you would
- have the ability to synchronize that with another computer (or a dedicated 
- server)
