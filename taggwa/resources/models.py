@@ -12,8 +12,9 @@ from taggwa.tags.models import Tag
 #  Resources that are associated w/ tag but don't have Bookmarks entanglement
 #   Are free to be claimed by users:
 class Resource(RegisteredType):
-    the_tag = models.ForeignKey(Tag)
-    
+    #the_tag = models.ForeignKey(Tag)
+    pass
+
 class Uri(Resource):
     the_url = models.CharField(default = "http://", max_length = 2048)
     
